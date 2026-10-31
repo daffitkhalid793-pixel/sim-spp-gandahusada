@@ -12,6 +12,6 @@
  * ============================================================
  */
 window.APP_CONFIG = {
-  GAS_URL: 'https://script.google.com/macros/s/AKfycby0FHucsw9pj7hisCz067cDsNc6BSGybe1MkbWME2oYXEDsNqxvOOFfmkdjZuH_n9Ee/exec',
+  GAS_URL: 'https://script.google.com/macros/s/AKfycbye-_oAjiE5UnQAu57nDea6_797Uz7uEdIUex6CgkOQ0_1F2wsNu0SYKH-tGmlnv6Mn/exec',
   TIMEOUT_MS: 60000   // batas tunggu satu permintaan (ms)
 };
