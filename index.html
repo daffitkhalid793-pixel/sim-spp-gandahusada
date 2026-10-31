@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="id" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>SIMSPP Ganda Husada</title>
+  <meta name="description" content="Sistem Informasi Manajemen Pembayaran SPP — SMK Kesehatan Ganda Husada">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="theme-color" content="#094CB2">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: blob: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23094CB2'/%3E%3Ctext x='16' y='21.5' font-family='Georgia,serif' font-size='14' font-weight='700' fill='white' text-anchor='middle'%3EGH%3C/text%3E%3C/svg%3E">
+  <!-- Tema diterapkan sebelum render pertama (tanpa kedip) -->
+  <script src="js/tema.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://script.google.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif:wght@600;700&family=Public+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ═══ Pemuat awal ═══ -->
+  <div id="bootLoader" role="status" aria-live="polite">
+    <div class="text-center">
+      <div class="boot-logo">GH</div>
+      <div class="h-sm">SIMSPP Ganda Husada</div>
+      <div class="text-mut mt-2"><span class="putar"></span> <span id="bootTeks">Menyiapkan aplikasi…</span></div>
+    </div>
+  </div>
+
+  <!-- ═══ Layar Masuk ═══ -->
+  <div id="loginView" class="hidden">
+    <aside class="login-kiri">
+      <div>
+        <div class="d-flex align-items-center gap-3 mb-5" style="position:relative;z-index:1">
+          <div class="sb-logo" style="background:rgba(255,255,255,.14)" id="lgLogo">GH</div>
+          <div>
+            <div class="lbl-sm" style="color:#B0C5FF" id="lgYayasan">Yayasan Pendidikan Ganda Husada</div>
+            <div class="serif" style="font-weight:700;font-size:18px" id="lgSekolah">SMK Kesehatan Ganda Husada</div>
+          </div>
+        </div>
+        <h1>Administrasi SPP yang tertib, transparan, dan siap diaudit.</h1>
+        <p class="mt-3" style="color:rgba(255,255,255,.8);max-width:460px;font-size:15px">Satu sistem untuk tagihan, pembayaran loket, verifikasi transfer, tunggakan, bukti PDF, dan laporan Farmasi Klinis &amp; Komunitas serta Asisten Keperawatan.</p>
+      </div>
+      <div class="login-fitur">
+        <div><i class="bi bi-shield-lock"></i><span>Hak akses diperiksa di server untuk setiap tindakan; kata sandi tersimpan sebagai hash.</span></div>
+        <div><i class="bi bi-fingerprint"></i><span>Setiap pembayaran membawa ID idempoten — klik ganda tidak menggandakan transaksi.</span></div>
+        <div><i class="bi bi-journal-check"></i><span>Koreksi &amp; pembatalan tercatat di log audit tambah-saja, tanpa menghapus data.</span></div>
+      </div>
+    </aside>
+    <main class="login-kanan">
+      <div class="login-kartu">
+        <div class="kartu">
+          <div class="lbl-sm text-pri mb-1">Sistem Informasi Manajemen Pembayaran SPP</div>
+          <h1 class="h-lg mb-1">Masuk ke SIMSPP</h1>
+          <p class="text-2 mb-4">Gunakan akun yang dibuat oleh Operator Sekolah.</p>
+          <div id="lgPeringatan"></div>
+          <form id="formLogin" autocomplete="on" novalidate>
+            <div class="mb-3">
+              <label class="form-label" for="lgUser">Nama pengguna</label>
+              <div class="input-ikon"><i class="bi bi-person"></i><input class="form-control" id="lgUser" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required></div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label" for="lgPass">Kata sandi</label>
+              <div class="pw-wrap input-ikon"><i class="bi bi-key"></i><input class="form-control" id="lgPass" type="password" name="password" autocomplete="current-password" required style="padding-right:44px">
+                <button type="button" class="btn btn-ghost btn-sm btn-icon" data-act="lihatSandi" data-target="lgPass" aria-label="Tampilkan kata sandi"><i class="bi bi-eye"></i></button></div>
+            </div>
+            <div id="lgPesan" class="invalid-msg mb-2" role="alert"></div>
+            <button class="btn btn-primary btn-lg w-100" type="submit" id="lgTombol"><i class="bi bi-box-arrow-in-right"></i> Masuk</button>
+          </form>
+          <p class="form-text mt-3 mb-0"><i class="bi bi-info-circle"></i> Pendaftaran mandiri tidak tersedia. Lupa kata sandi? Hubungi Operator Sekolah untuk reset.</p>
+        </div>
+        <div class="d-flex justify-content-between mt-3 text-mut" style="font-size:12px">
+          <span id="lgVersi">SIMSPP v1.0</span>
+          <button class="btn btn-ghost btn-sm" data-act="gantiTema"><i class="bi bi-moon-stars"></i> Tema</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ═══ Aplikasi (SPA) ═══ -->
+  <div id="appView" class="hidden">
+    <aside class="sidebar" id="sidebar" aria-label="Navigasi utama">
+      <div class="sb-brand">
+        <div class="sb-logo" id="sbLogo">GH</div>
+        <div style="min-width:0"><div class="sb-nama">SIMSPP</div><div class="sb-sub" id="sbSekolah">SMK Kesehatan</div></div>
+      </div>
+      <nav class="sb-nav" id="sbNav"></nav>
+      <div class="sb-foot"><span id="sbTA">TA —</span><span class="text-ok"><span class="dot"></span> Aktif</span></div>
+    </aside>
+
+    <div class="main-wrap">
+      <header class="topbar">
+        <button class="btn btn-ghost btn-icon d-xl-none" data-act="bukaSidebar" aria-label="Buka menu"><i class="bi bi-list" style="font-size:22px"></i></button>
+        <div class="cari-global input-ikon">
+          <i class="bi bi-search"></i>
+          <input class="form-control" id="cariGlobal" placeholder="Cari NIS, nama siswa, atau no. bukti…" autocomplete="off" aria-label="Pencarian global" style="background:var(--surface-2)">
+          <div class="cari-hasil hidden" id="cariHasil" role="listbox"></div>
+        </div>
+        <button class="pill-sync" id="pillSync" data-act="segarkan" title="Status sinkronisasi — klik untuk menyegarkan"><span class="dot"></span><span class="tx" id="syncTeks">Live Sistem v1.0</span></button>
+        <div class="ms-auto d-flex align-items-center gap-1">
+          <button class="btn btn-ghost btn-icon d-none d-md-inline-flex" data-act="gantiTema" aria-label="Ganti tema terang/gelap" title="Tema"><i class="bi bi-moon-stars" id="ikonTema"></i></button>
+          <div class="dropdown">
+            <button class="btn btn-ghost btn-icon btn-notif" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-label="Notifikasi"><i class="bi bi-bell" style="font-size:19px"></i><span class="lencana pri hidden" id="notifJumlah">0</span></button>
+            <div class="dropdown-menu dropdown-menu-end" style="width:360px;max-width:92vw" id="notifMenu"></div>
+          </div>
+          <div class="dropdown">
+            <button class="user-chip" data-bs-toggle="dropdown" aria-label="Menu pengguna">
+              <span class="user-teks"><span class="user-nama d-block" id="uNama">—</span><span class="user-peran d-block" id="uPeran">—</span></span>
+              <span class="avatar" id="uAvatar">—</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><button class="dropdown-item" data-act="formGantiSandi"><i class="bi bi-key"></i> Ganti kata sandi</button></li>
+              <li><button class="dropdown-item" data-act="gantiTema"><i class="bi bi-circle-half"></i> Tema terang / gelap</button></li>
+              <li><button class="dropdown-item" data-act="keluarSemua"><i class="bi bi-phone"></i> Keluar dari semua perangkat</button></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><button class="dropdown-item text-err" data-act="keluar"><i class="bi bi-box-arrow-right"></i> Keluar</button></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+
+      <main id="main" tabindex="-1">
+
+        <!-- ─── Dashboard (W-04) ─── -->
+        <section class="halaman" id="hal-dashboard" aria-labelledby="jdDashboard">
+          <div class="page-head">
+            <div>
+              <div class="crumb">W-04 Konsol Operasional <i class="bi bi-chevron-right"></i> <b>Biro Administrasi Keuangan</b></div>
+              <h1 class="h-xl" id="jdDashboard">Dashboard Operasional</h1>
+              <p class="page-sub">Ringkasan penerimaan SPP, tagihan, tunggakan, dan antrean administrasi secara langsung.</p>
+            </div>
+            <div class="aksi-head"><span class="chip chip-info" id="dbTA"></span><span class="text-mut" style="font-size:12px" id="dbWaktu"></span></div>
+          </div>
+          <div class="filter-bar" id="dbFilter"></div>
+          <div class="grid-kpi" id="dbAksi"></div>
+          <div class="grid-kpi" id="dbKpi"></div>
+          <div class="grid-2 mb-4">
+            <div class="kartu">
+              <div class="kartu-head">
+                <div><div class="h-sm">Tren Penerimaan Kas</div><div class="text-mut" style="font-size:12px">Tunai loket vs transfer/QRIS terverifikasi</div></div>
+                <div class="seg" id="dbTrenMode"><button data-act="dbTren" data-v="harian" class="aktif">Harian</button><button data-act="dbTren" data-v="bulanan">Bulanan</button><button data-act="dbTren" data-v="tahunan">Tahunan</button></div>
+              </div>
+              <div style="height:280px"><canvas id="chTren" aria-label="Grafik tren penerimaan"></canvas></div>
+            </div>
+            <div class="kartu">
+              <div class="kartu-head"><div class="h-sm">Status Pembayaran Siswa</div></div>
+              <div style="height:200px"><canvas id="chStatus" aria-label="Grafik status pembayaran siswa"></canvas></div>
+              <div id="dbStatusLeg" class="mt-3"></div>
+            </div>
+          </div>
+          <div class="grid-2 mb-4">
+            <div class="kartu">
+              <div class="kartu-head"><div><div class="h-sm">Perbandingan Jurusan</div><div class="text-mut" style="font-size:12px">Tagihan jatuh tempo, pembayaran diterima, dan sisa tunggakan</div></div></div>
+              <div style="height:260px"><canvas id="chJurusan" aria-label="Grafik perbandingan jurusan"></canvas></div>
+            </div>
+            <div class="kartu" id="dbPrioritas"></div>
+          </div>
+          <div class="grid-2">
+            <div class="tbl-wrap" id="dbAktivitas"></div>
+            <div class="tumpuk"><div class="kartu" id="dbKasir"></div><div class="kartu" id="dbInsight"></div></div>
+          </div>
+        </section>
+
+        <!-- ─── Data Siswa ─── -->
+        <section class="halaman" id="hal-siswa">
+          <div class="page-head">
+            <div>
+              <div class="crumb">Data Master <i class="bi bi-chevron-right"></i> <b>Buku Induk Keuangan Siswa</b></div>
+              <h1 class="h-xl">Data Siswa <span class="chip chip-info align-middle" id="swJumlah" style="font-family:var(--font-label)"></span></h1>
+              <p class="page-sub">Biodata siswa, pemetaan kelas kejuruan, dan status kewajiban SPP. NIS bersifat unik.</p>
+            </div>
+            <div class="aksi-head" id="swAksi"></div>
+          </div>
+          <div class="grid-kpi" id="swKpi"></div>
+          <div class="filter-bar" id="swFilter"></div>
+          <div class="filter-aktif" id="swChip"></div>
+          <div id="swBulk"></div>
+          <div class="tbl-wrap" id="swTabel"></div>
+        </section>
+
+        <!-- ─── Tagihan & Tunggakan ─── -->
+        <section class="halaman" id="hal-tagihan">
+          <div class="page-head">
+            <div>
+              <div class="crumb">Keuangan <i class="bi bi-chevron-right"></i> <b>Matriks Tagihan &amp; Tunggakan</b></div>
+              <h1 class="h-xl">Tagihan &amp; Tunggakan</h1>
+              <p class="page-sub">Status setiap bulan per siswa dihitung otomatis dari pembayaran terverifikasi — bukan dari transaksi yang dibatalkan.</p>
+            </div>
+            <div class="aksi-head" id="tgAksi"></div>
+          </div>
+          <div class="grid-kpi" id="tgKpi"></div>
+          <div class="filter-bar" id="tgFilter"></div>
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+            <div class="legenda">
+              <span><span class="mx-sel lunas">✓</span>Lunas</span><span><span class="mx-sel sebagian">½</span>Sebagian</span><span><span class="mx-sel tunggak">!</span>Menunggak</span><span><span class="mx-sel belum">○</span>Belum jatuh tempo</span><span><span class="mx-sel tahan">⧗</span>Menunggu verifikasi</span><span><span class="mx-sel datang">·</span>Mendatang</span>
+            </div>
+            <span class="text-mut" style="font-size:12px" id="tgInfo"></span>
+          </div>
+          <div class="tbl-wrap" id="tgTabel"></div>
+        </section>
+
+        <!-- ─── Catat Pembayaran (W-08 Kasir Loket) ─── -->
+        <section class="halaman" id="hal-bayar">
+          <div class="page-head">
+            <div>
+              <div class="crumb">Kasir Keuangan <i class="bi bi-chevron-right"></i> W-08 Catat Pembayaran Loket <i class="bi bi-chevron-right"></i> <b id="byAntrean">Transaksi Baru</b></div>
+              <h1 class="h-xl d-flex align-items-center gap-3 flex-wrap">Loket Kasir SPP <span class="chip chip-info" style="font-family:var(--font-mono);text-transform:none;font-size:12px" id="byIdem"></span></h1>
+            </div>
+            <div class="aksi-head" style="font-size:12px;color:var(--text-2)">
+              <span><kbd>F2</kbd> Cari</span><span><kbd>F4</kbd> Tunai</span><span><kbd>F8</kbd> Simpan</span><span><kbd>Esc</kbd> Batal</span>
+            </div>
+          </div>
+          <div id="byBanner"></div>
+          <div class="kasir-grid">
+            <div class="tumpuk">
+              <div class="kartu">
+                <div class="kartu-head"><div class="label d-flex align-items-center gap-2"><i class="bi bi-upc-scan text-pri"></i> Identifikasi Siswa / Kartu SPP</div><span class="chip chip-info"><span class="dot berdenyut"></span>Pemindai siap (F2)</span></div>
+                <div class="cari-siswa">
+                  <i class="bi bi-person-vcard"></i>
+                  <input class="form-control" id="byCari" placeholder="Ketik/pindai NIS atau nama siswa…" autocomplete="off" aria-label="Cari siswa untuk pembayaran">
+                  <div class="cari-hasil hidden" id="byHasil" role="listbox"></div>
+                </div>
+                <div id="bySiswa"></div>
+              </div>
+              <div class="kartu" id="byBulan"></div>
+              <div class="kartu-2 hidden" id="byTerakhir"></div>
+            </div>
+            <div class="kasir-kanan">
+              <div class="kartu tumpuk" id="byPanel" style="--gap:1rem"></div>
+              <div class="kartu mt-3" id="byRekap"></div>
+            </div>
+          </div>
+          <div class="bar-bawah" id="byBarBawah"></div>
+        </section>
+
+        <!-- ─── Verifikasi Transfer ─── -->
+        <section class="halaman" id="hal-verifikasi">
+          <div class="page-head">
+            <div>
+              <div class="crumb">Kasir Keuangan <i class="bi bi-chevron-right"></i> <b>Antrean Verifikasi</b></div>
+              <h1 class="h-xl">Verifikasi Transfer</h1>
+              <p class="page-sub">Pembayaran transfer &amp; QRIS baru diakui dan memperbarui saldo tagihan setelah diverifikasi terhadap mutasi rekening.</p>
+            </div>
+            <div class="aksi-head" id="vfRingkas"></div>
+          </div>
+          <div class="filter-bar" id="vfFilter"></div>
+          <div id="vfDaftar"></div>
+        </section>
+
+        <!-- ─── Riwayat Transaksi ─── -->
+        <section class="halaman" id="hal-riwayat">
+          <div class="page-head">
+            <div>
+              <div class="crumb">Kasir Keuangan <i class="bi bi-chevron-right"></i> <b>Buku Kas Pembayaran</b></div>
+              <h1 class="h-xl">Riwayat Transaksi</h1>
+              <p class="page-sub">Cari &amp; saring berdasarkan nama, NIS, nomor bukti, tanggal, periode, jurusan, kelas, metode, petugas, dan status.</p>
+            </div>
+            <div class="aksi-head"><button class="btn btn-outline-primary" data-act="rwEkspor"><i class="bi bi-file-earmark-spreadsheet"></i> Ekspor Excel (filter aktif)</button></div>
+          </div>
+          <div class="filter-bar" id="rwFilter"></div>
+          <div class="filter-aktif" id="rwChip"></div>
+          <div class="tbl-wrap" id="rwTabel"></div>
+        </section>
+
+        <!-- ─── Persetujuan Koreksi ─── -->
+        <section class="halaman" id="hal-koreksi">
+          <div class="page-head">
+            <div>
+              <div class="crumb">Kasir Keuangan <i class="bi bi-chevron-right"></i> <b>Koreksi &amp; Pembatalan</b></div>
+              <h1 class="h-xl" id="krJudul">Persetujuan Koreksi</h1>
+              <p class="page-sub">Koreksi menyimpan nilai sebelum &amp; sesudah. Pembatalan mengubah status menjadi Dibatalkan — transaksi tidak pernah dihapus.</p>
+            </div>
+          </div>
+          <div class="tab-garis" id="krTab"></div>
+          <div id="krDaftar"></div>
+        </section>
+
+        <!-- ─── Siaran Pengingat (W-22) ─── -->
+        <section class="halaman" id="hal-siaran">
+          <div class="page-head">
+            <div>
+              <div class="crumb">Komunikasi &amp; Notifikasi <i class="bi bi-chevron-right"></i> <b>W-22 Siaran Pengingat Tunggakan</b></div>
+              <h1 class="h-xl">Siaran Pengingat Tunggakan</h1>
+              <p class="page-sub">Pengingat pra-jatuh tempo per batch dengan jeda acak, pemeriksaan ulang pelunasan kasir sebelum setiap kirim, checkpoint, dan kill switch.</p>
+            </div>
+            <div class="aksi-head" id="srMode"></div>
+          </div>
+          <div class="stepper" id="srStepper"></div>
+          <div id="srIsi"></div>
+        </section>
+
+        <!-- ─── Notifikasi & Kuitansi ─── -->
+        <section class="halaman" id="hal-notifikasi">
+          <div class="page-head">
+            <div>
+              <div class="crumb">Komunikasi &amp; Notifikasi <i class="bi bi-chevron-right"></i> <b>W-13/W-20 Distribusi Kuitansi</b></div>
+              <h1 class="h-xl">Notifikasi Email &amp; Kuitansi</h1>
+              <p class="page-sub">Tanda terima otomatis setelah pembayaran sah, pengingat terjadwal, templat pesan, dan log pengiriman. Kegagalan kirim tidak membatalkan transaksi.</p>
+            </div>
+            <div class="aksi-head"><button class="btn btn-primary" data-act="ntSimpan"><i class="bi bi-floppy"></i> Simpan Konfigurasi</button></div>
+          </div>
+          <div class="grid-kpi" id="ntKpi"></div>
+          <div class="grid-2s mb-4"><div class="kartu" id="ntPemicu"></div><div class="kartu" id="ntTemplat"></div></div>
+          <div class="tbl-wrap" id="ntLog"></div>
+        </section>
+
+        <!-- ─── Data Akademik ─── -->
+        <section class="halaman" id="hal-akademik">
+          <div class="page-head">
+            <div>
+              <div class="crumb">Administrasi <i class="bi bi-chevron-right"></i> <b>Jurusan, Tahun Ajaran &amp; Kelas</b></div>
+              <h1 class="h-xl">Data Akademik</h1>
+              <p class="page-sub">Data master yang menjadi dasar tarif dan tagihan. Data tidak dihapus — nonaktifkan bila tidak dipakai.</p>
+            </div>
+            <div class="aksi-head" id="akAksi"></div>
+          </div>
+          <div class="tab-garis" id="akTab"></div>
+          <div class="tbl-wrap" id="akTabel"></div>
+        </section>
+
+        <!-- ─── Tarif SPP ─── -->
+        <section class="halaman" id="hal-tarif">
+          <div class="page-head">
+            <div>
+              <div class="crumb">Administrasi <i class="bi bi-chevron-right"></i> <b>Tarif per Jurusan, Tingkat &amp; Tahun Ajaran</b></div>
+              <h1 class="h-xl">Tarif SPP</h1>
+              <p class="page-sub">Perubahan tarif hanya berlaku untuk tagihan yang dibuat sesudahnya — tagihan yang sudah terbit tidak berubah.</p>
+            </div>
+            <div class="aksi-head" id="trAksi"></div>
+          </div>
+          <div id="trIsi"></div>
+        </section>
+
+        <!-- ─── Impor Excel ─── -->
+        <section class="halaman" id="hal-impor">
+          <div class="page-head">
+            <div>
+              <div class="crumb">Administrasi <i class="bi bi-chevron-right"></i> <b>Migrasi Data Excel</b></div>
+              <h1 class="h-xl">Impor Data Excel</h1>
+              <p class="page-sub">Validasi → deteksi duplikat → pratinjau → konfirmasi. Data lama tidak pernah ditimpa; cadangan spreadsheet dibuat sebelum menyimpan.</p>
+            </div>
+          </div>
+          <div id="imIsi"></div>
+        </section>
+
+        <!-- ─── Laporan Keuangan (W-16) ─── -->
+        <section class="halaman" id="hal-laporan">
+          <div class="page-head">
+            <div>
+              <div class="crumb">Kasir Keuangan <i class="bi bi-chevron-right"></i> <b>W-16 Laporan &amp; Audit Keuangan</b></div>
+              <h1 class="h-xl">Laporan Keuangan &amp; Ekspor</h1>
+              <p class="page-sub">Rekap penerimaan, tunggakan, transaksi per metode &amp; status, serta koreksi — siap cetak PDF dan Excel.</p>
+            </div>
+            <div class="aksi-head" id="lpAksi"></div>
+          </div>
+          <div class="grid-2 lp-grid" style="grid-template-columns:320px minmax(0,1fr)" id="lpGrid">
+            <div class="kartu" id="lpFilter" style="align-self:start"></div>
+            <div class="pratinjau-wrap"><div class="lembar dok" id="lpDok"></div></div>
+          </div>
+        </section>
+
+        <!-- ─── Pengguna & Hak Akses ─── -->
+        <section class="halaman" id="hal-pengguna">
+          <div class="page-head">
+            <div>
+              <div class="crumb">Administrasi <i class="bi bi-chevron-right"></i> <b>Akun &amp; RBAC</b></div>
+              <h1 class="h-xl">Pengguna &amp; Hak Akses</h1>
+              <p class="page-sub">Akun hanya dibuat Operator. Akun nonaktif tidak dapat masuk; perubahan peran langsung mencabut sesi lama.</p>
+            </div>
+            <div class="aksi-head"><button class="btn btn-primary" data-act="formPengguna"><i class="bi bi-person-plus"></i> Tambah Pengguna</button></div>
+          </div>
+          <div class="tbl-wrap mb-4" id="pgTabel"></div>
+          <div class="kartu" id="pgRbac"></div>
+        </section>
+
+        <!-- ─── Pengaturan & Log ─── -->
+        <section class="halaman" id="hal-pengaturan">
+          <div class="page-head">
+            <div>
+              <div class="crumb">Administrasi <i class="bi bi-chevron-right"></i> <b>Konfigurasi Sistem</b></div>
+              <h1 class="h-xl">Pengaturan &amp; Log</h1>
+              <p class="page-sub">Identitas sekolah, aturan keuangan &amp; berkas, integrasi, cadangan, dan log audit tambah-saja.</p>
+            </div>
+          </div>
+          <div class="tab-garis" id="psTab"></div>
+          <div id="psIsi"></div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+  <div class="tirai hidden" id="tirai" data-act="tutupSidebar"></div>
+
+  <!-- ═══ Modal umum ═══ -->
+  <div class="modal fade" id="mdl" tabindex="-1" aria-hidden="true" aria-labelledby="mdlJudul">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" id="mdlDialog">
+      <div class="modal-content">
+        <div class="modal-header"><h2 class="modal-title" id="mdlJudul">—</h2><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button></div>
+        <div class="modal-body" id="mdlIsi"></div>
+        <div class="modal-footer" id="mdlKaki"></div>
+      </div>
+    </div>
+  </div>
+  <!-- ═══ Modal bukti pembayaran ═══ -->
+  <div class="modal fade" id="mdlKw" tabindex="-1" aria-hidden="true" aria-labelledby="kwJudul">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header" style="flex-wrap:wrap;gap:.5rem">
+          <div class="d-flex align-items-center gap-3" style="min-width:0">
+            <span class="kpi-ikon ok" id="kwIkon"><i class="bi bi-check2-circle"></i></span>
+            <div style="min-width:0"><h2 class="modal-title" id="kwJudul">Bukti Pembayaran</h2><div class="text-2" style="font-size:12.5px" id="kwSub"></div></div>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+        </div>
+        <div class="px-3 pt-3 d-flex gap-2 flex-wrap" id="kwAksi"></div>
+        <div class="modal-body"><div class="pratinjau-wrap"><div id="kwLembar"></div></div><div id="kwStatus" class="mt-3"></div></div>
+        <div class="modal-footer justify-content-between" id="kwKaki"></div>
+      </div>
+    </div>
+  </div>
+  <!-- ═══ Konfirmasi (dialog native, selalu di atas modal) ═══ -->
+  <dialog class="konfirmasi" id="dlgKf" aria-labelledby="kfJudul">
+    <form method="dialog">
+      <div class="kf-isi"><div class="h-sm mb-2" id="kfJudul">Konfirmasi</div><div class="text-2" id="kfPesan"></div><div id="kfInput" class="mt-3"></div></div>
+      <div class="kf-kaki"><button class="btn btn-soft" value="batal" id="kfBatal">Batal</button><button class="btn btn-primary" value="ok" id="kfOk">Ya, lanjutkan</button></div>
+    </form>
+  </dialog>
+  <div class="toast-wadah" id="toastWadah" aria-live="polite" aria-atomic="false"></div>
+  <div id="printArea"></div>
+  <input type="file" id="berkasTersembunyi" class="hidden">
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <!-- Urutan penting: config → inti → data → halaman; mulai() dipanggil di akhir admin.js -->
+  <script src="js/config.js"></script>
+  <script src="js/inti.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/kasir.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
